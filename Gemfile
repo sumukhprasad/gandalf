@@ -9,6 +9,7 @@ gem "sqlite3"
 gem "rackup"
 gem "mail"
 gem "rake"
+gem "bcrypt"
 
 group :test do
 	gem "minitest"
