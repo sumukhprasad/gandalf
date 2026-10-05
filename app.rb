@@ -3,6 +3,18 @@ require "sinatra/base"
 require_relative "config/database"
 require_relative "models/user"
 
+if User.all == []
+	User.create(
+		username: "admin",
+		email: "admin@example.com",
+		token_hash: "",
+		role: "admin",
+		created_at: Time.now
+	)
+	
+	puts "A new default admin user was created!"
+end
+
 class Gandalf < Sinatra::Base
 	set :environment, ENV.fetch("RACK_ENV", "development").to_sym
 	set :views, File.expand_path("views", __dir__)

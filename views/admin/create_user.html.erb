@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	
+	<title>gandalf</title>
+
+	<%= erb :"_includes/head" %>
+</head>
+
+<body>
+	<%= erb :"_includes/navigation" %>
+	
+	
+	<main>
+		<h1>Gandalf Administration -- Provision New User</h1>
+		
+	
+		<form action="/admin/create_user" method="post" accept-charset="utf-8">
+			<label for="username">Username: </label><input type="text" name="username" value=""><br>
+			<label for="email">Email: </label><input type="text" name="email" value=""><br>
+			<label for="email">Role (<i>default: member</i>): </label>
+			<select name="role" id="role">
+				<option value="member" seletced>member</option>
+				<option value="verifier">verifier</option>
+				<option value="admin">admin</option>
+				
+			</select>
+			<br>
+	
+			<p><input type="submit" value="Create"></p>
+		</form>
+		
+	</main>
+
+	<%= erb :"_includes/footer" %>
+</body>
+</html>

@@ -2,35 +2,18 @@ require "bcrypt"
 
 
 configure_routes do
-	get "/users/create" do
-		erb :user_create
-	end
-	
-	post "/users/create" do
-		User.create(
-			username: params[:username],
-			email: params[:email],
-			token_hash: "",
-			role: params[:role] || "member",
-			created_at: Time.now
-		)
-		
-		erb :home
-	end
-	
-	
 	get "/users/login" do
 		erb :"users/login"
 	end
 	
 	post "/users/login" do
 		user = User.first(username: params[:username])
-
+		puts params[:username]
 		unless user && user.active
 			halt 401
 		end
 
-		if user.token_hash == ""
+		if user.token_hash == "" || user.token_hash == nil
 			session[:password_setup_user_id] = user.id
 			redirect "/users/set-password"
 		end

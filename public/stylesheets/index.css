@@ -340,4 +340,20 @@ a:hover {
   height: 35px;
 }
 
+table {
+  border-collapse: collapse;
+}
+table th, table td {
+  padding: 3px 5px;
+}
+table th {
+  background-color: #aaa;
+  text-align: left;
+  color: white;
+  font-weight: bold;
+}
+table td {
+  border-bottom: 1px dashed #aaa;
+}
+
 /*# sourceMappingURL=index.css.map */
