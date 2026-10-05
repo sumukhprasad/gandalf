@@ -1,5 +1,9 @@
 configure_routes do
 	get "/" do
-		erb :home
+		if @current_user
+			erb :home
+		else
+			erb :"users/login"
+		end
 	end
 end

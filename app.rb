@@ -10,8 +10,8 @@ class Gandalf < Sinatra::Base
 	enable :sessions
 	
 	before do
-		user = User.first(username: params[:username])
-		puts user
+		@current_user = User[session[:user_id]] if session[:user_id]
+		puts @current_user
 	end
 	
 	# not the most secure, but eh it works.

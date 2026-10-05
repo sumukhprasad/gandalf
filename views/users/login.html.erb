@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	
+	<title>gandalf</title>
+
+	<%= erb :"_includes/head" %>
+</head>
+
+<body>
+	<div class="center">
+		<img src="/images/logo.png">
+		
+		<form action="/users/login" method="post" accept-charset="utf-8">
+			<input type="text" name="username" value="" placeholder="username"><br>
+			<input type="password" name="token" value="" placeholder="access token"><br>
+	
+			<p><input type="submit" value="continue"></p>
+		</form>
+	</div>
+</body>
+</html>

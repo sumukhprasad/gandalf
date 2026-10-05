@@ -1,0 +1,19 @@
+<nav>
+	<div class="nav-content">
+		<div class="top">
+			<img src="/images/logo.png">
+			
+			<div>
+				<% if @current_user %>
+					Hello, <%= @current_user.username %>. <a href="/users/logout">Log out...</a>
+				<% else %>
+					Hello. <a href="/users/login">Log in...</a>
+				<% end %>
+				
+			</div>
+		</div>
+		
+		<div class="bottom">
+		</div>
+	</div>
+</nav>

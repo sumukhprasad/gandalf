@@ -27,7 +27,7 @@ configure_routes do
 		user = User.first(username: params[:username])
 
 		unless user && user.active
-			halt 401, "invalid credentials"
+			halt 401
 		end
 
 		if user.token_hash == ""
@@ -38,7 +38,7 @@ configure_routes do
 		token = BCrypt::Password.new(user.token_hash)
 
 		unless token == params[:token]
-			halt 401, "invalid credentials"
+			halt 401
 		end
 
 		session[:user_id] = user.id
@@ -80,4 +80,19 @@ configure_routes do
 
 		redirect "/"
 	end
+	
+	get "/users/logout" do
+		if @current_user
+			@current_user = nil
+			session.delete(:user_id)
+		end
+		
+		redirect "/"
+	end
 end
+
+
+error 401 do
+    erb :"users/invalid"
+end
+
