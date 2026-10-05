@@ -3,6 +3,7 @@ nav
 	max-width: 900px
 	margin: auto
 	padding: 20px 20px 0px 20px
+	overflow: hidden
 	
 	.nav-content
 		width: 100vw
@@ -18,3 +19,30 @@ nav
 			img
 				height: 35px
 	
+	
+	.tabs
+		display: flex
+		flex-direction: row
+		justify-content: start
+		margin: auto
+		position: relative
+		margin-bottom: -1px
+		a
+			text-decoration: none
+
+		.tab
+			font-size: 12px
+			text-shadow: none
+			color: rgba(0,0,0,0.7)
+			background-color: #d5d5d5
+			padding: 3px 5px
+			border-radius: 5px 5px 0px 0px
+			margin-right: 10px
+			min-width: 70px
+			&:hover
+				background-color: #c5c5c5
+	
+		.active
+			background-color: #FFFFFF
+			border: 1px solid #D5D5D5
+			box-shadow: 0 2px 2px 0 rgba(0,0,0,0.5)

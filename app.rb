@@ -11,7 +11,6 @@ class Gandalf < Sinatra::Base
 	
 	before do
 		@current_user = User[session[:user_id]] if session[:user_id]
-		puts @current_user
 	end
 	
 	# not the most secure, but eh it works.

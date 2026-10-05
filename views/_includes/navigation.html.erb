@@ -14,6 +14,21 @@
 		</div>
 		
 		<div class="bottom">
+			<div class="tabs">
+				<a href="/"><div class="tab">
+					home
+				</div></a>
+				<a href="docs.html"><div class="tab">
+					user settings
+				</div></a>
+				
+
+				<% if @current_user.role == "admin" %>
+				<a href="/admin"><div class="tab">
+					ADMINISTRATION
+				</div></a>
+				<% end %>
+			</div>
 		</div>
 	</div>
 </nav>
