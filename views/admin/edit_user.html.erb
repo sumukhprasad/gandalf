@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	
+	<title>gandalf</title>
+
+	<%= erb :"_includes/head" %>
+</head>
+
+<body>
+	<%= erb :"_includes/navigation" %>
+	
+	
+	<main>
+		<h1>Gandalf Administration -- Editing User <i><%= @user.username %></i></h1>
+
+		<form method="post" action="/admin/users/<%= @user.id %>/edit">
+			<div>
+				<label for="username">Username</label>
+				<input
+					type="text"
+					id="username"
+					name="username"
+					value="<%= @user.username %>"
+					required
+				>
+			</div>
+
+			<div>
+				<label for="email">Email</label>
+				<input
+					type="email"
+					id="email"
+					name="email"
+					value="<%= @user.email %>"
+					required
+				>
+			</div>
+
+			<div>
+				<label for="role">Role</label>
+				<select id="role" name="role">
+					<option value="member" <%= "selected" if @user.role == "member" %>>
+						member
+					</option>
+
+					<option value="verifier" <%= "selected" if @user.role == "verifier" %>>
+						verifier
+					</option>
+
+					<option value="admin" <%= "selected" if @user.role == "admin" %>>
+						admin
+					</option>
+				</select>
+			</div>
+
+			<div>
+				<button type="submit">Save changes</button>
+				<a href="/admin/users/<%= @user.id %>">No, cancel</a>
+			</div>
+		</form>
+
+		
+		
+	</main>
+
+	<%= erb :"_includes/footer" %>
+</body>
+</html>

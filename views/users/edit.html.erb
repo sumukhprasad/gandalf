@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	
+	<title>gandalf</title>
+
+	<%= erb :"_includes/head" %>
+</head>
+
+<body>
+	<%= erb :"_includes/navigation" %>
+	
+	
+	<main>
+		<h1>Edit user: <%= @user.username %></h1>
+
+		<form method="post" action="/users/profile/edit">
+			<div>
+				<label for="username">Username</label>
+				<input
+					type="text"
+					id="username"
+					name="username"
+					value="<%= @user.username %>"
+					required
+				>
+			</div>
+
+			<div>
+				<label for="email">Email</label>
+				<input
+					type="email"
+					id="email"
+					name="email"
+					value="<%= @user.email %>"
+					required
+				>
+			</div>
+
+			<div>
+				<button type="submit">Save changes</button>
+				<a href="/users/profile">No, cancel.</a>
+			</div>
+		</form>
+		
+	</main>
+
+	<%= erb :"_includes/footer" %>
+</body>
+</html>

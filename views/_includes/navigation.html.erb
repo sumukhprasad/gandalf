@@ -18,9 +18,6 @@
 				<a href="/"><div class="tab">
 					home
 				</div></a>
-				<a href="docs.html"><div class="tab">
-					user settings
-				</div></a>
 				
 
 				<% if @current_user.role == "admin" %>
@@ -28,6 +25,11 @@
 					administrative
 				</div></a>
 				<% end %>
+				
+
+				<a href="/users/profile"><div class="tab">
+					user settings
+				</div></a>
 			</div>
 		</div>
 	</div>

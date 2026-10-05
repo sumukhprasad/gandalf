@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	
+	<title>gandalf</title>
+
+	<%= erb :"_includes/head" %>
+</head>
+
+<body>
+	<%= erb :"_includes/navigation" %>
+	
+	
+	<main>
+		<h1>User: <%= @user.username %></h1>
+		
+		<p>
+			<strong>Username:</strong>
+			<%= @user.username %>
+		</p>
+
+		<p>
+			<strong>Email:</strong>
+			<%= @user.email %>
+		</p>
+
+		<p>
+			<strong>Role:</strong>
+			<%= @user.role %>
+		</p>
+
+		<p>
+			<strong>Member since:</strong>
+			<%= @user.created_at %>
+		</p>
+
+		<p>
+			<strong>Active?:</strong>
+			<%= @user.active ? "active" : "inactive" %>
+			<i>To deactivate, contact an administrator.</i>
+		</p>
+		
+		<p>
+			<strong>Reset password:</strong>
+			<% if @user.token_hash != "" %>
+			<form method="post" action="/users/reset">
+				<button type="submit">
+					Prompt for password next time
+				</button>
+			</form>
+			<% end %>
+		</p>
+
+		<p>
+			<a href="/users/profile/edit">Edit...</a>
+		</p>
+	</main>
+
+	<%= erb :"_includes/footer" %>
+</body>
+</html>

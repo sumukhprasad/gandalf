@@ -60,9 +60,9 @@
 							<%= u.active %>
 						</td>
 						<td>
-							<a href="/admin/users/<%= u.id %>">View</a> /
-							<a href="/admin/users/<%= u.id %>">Edit</a> /
-							<a href="/admin/users/<%= u.id %>">Make <%= u.active ? "inactive" : "active" %></a>
+							<a href="/admin/users/<%= u.username %>">View</a> /
+							<a href="/admin/users/<%= u.username %>/edit">Edit</a> /
+							<a href="/admin/users/<%= u.username %>">Make <%= u.active ? "inactive" : "active" %></a>
 						</td>
 				  </tr>
 				<% end %>
