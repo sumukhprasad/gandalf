@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	
+	<title>gandalf</title>
+
+	<%= erb :"_includes/head" %>
+</head>
+
+<body>
+	<%= erb :"_includes/navigation" %>
+	
+	<main>
+		<h1>Group Info: <i><%= @group.name %></i></h1>
+
+		<p>
+			<strong>Name:</strong>
+			<%= @group.name %>
+		</p>
+
+		<p>
+			<strong>Slug:</strong>
+			<code><%= @group.slug %></code>
+		</p>
+
+		<p>
+			<strong>Created:</strong>
+			<%= @group.created_at %>
+		</p>
+
+		
+		
+		<h2>Members</h2>
+		<% if @memberships.empty? %>
+			<p>this group has no members.</p>
+		<% else %>
+			<ul>
+				<% @memberships.each do |membership| %>
+					<li>
+						<strong><%= membership.user.username %></strong>
+						<span><%= membership.role %></span>
+					</li>
+				<% end %>
+			</ul>
+		<% end %>
+		
+	</main>
+	
+
+	<%= erb :"_includes/footer" %>
+</body>
+</html>

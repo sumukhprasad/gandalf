@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	
+	<title>gandalf</title>
+
+	<%= erb :"_includes/head" %>
+</head>
+
+<body>
+	<%= erb :"_includes/navigation" %>
+	
+	<main>
+		<h1>My Groups</h1>
+		
+		
+		<table>
+			<thead>
+				<tr>
+					<th>
+						id
+					</th>
+					<th>
+						name
+					</th>
+					<th>
+						slug
+					</th>
+					<th>
+						actions
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				<% @groups.each do |g| %>
+					<tr>
+						<td>
+							<%= g.id %>
+						</td>
+						<td>
+							<h2><%= g.name %></h2>
+						</td>
+						<td>
+							<code><%= g.slug %></code>
+						</td>
+						<td>
+							<a href="/groups/<%= g.slug %>">View</a>
+						</td>
+				  </tr>
+				<% end %>
+			</tbody>
+		</table>
+	</main>
+	
+
+	<%= erb :"_includes/footer" %>
+</body>
+</html>

@@ -50,7 +50,8 @@
 						<th>email</th>
 						<th>role</th>
 						<th>joined</th>
-						<th></th>
+						<th>edit</th>
+						<th>remove</th>
 					</tr>
 				</thead>
 
@@ -71,6 +72,12 @@
 
 							<td>
 								<%= membership.created_at %>
+							</td>
+							
+							<td>
+								<a href="/admin/groups/<%= @group.slug %>/members/<%= membership.user.username %>/edit">
+									Edit
+								</a>
 							</td>
 
 							<td>

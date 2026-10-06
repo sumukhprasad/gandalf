@@ -219,6 +219,51 @@ configure_routes do
 
 		redirect "/admin/groups/#{@group.slug}"
 	end
+	
+	
+	get "/admin/groups/:slug/members/:username/edit" do
+		require_admin!
+
+		@group = find_group!
+
+		user = User.where(username: params[:username]).first
+		halt 404, "User not found" unless user
+
+		@membership = Membership.where(
+			group_id: @group.id,
+			user_id: user.id
+		).first
+
+		halt 404, "Membership not found" unless @membership
+
+		erb :"admin/groups/edit_member"
+	end
+	
+	post "/admin/groups/:slug/members/:username/edit" do
+		require_admin!
+
+		@group = find_group!
+
+		user = User.where(username: params[:username]).first
+		halt 404, "User not found" unless user
+
+		membership = Membership.where(
+			group_id: @group.id,
+			user_id: user.id
+		).first
+
+		halt 404, "Membership not found" unless membership
+
+		role = params[:role].to_s.strip
+
+		halt 400, "Invalid role" unless %w[member moderator verifier].include?(role)
+
+		membership.update(
+			role: role
+		)
+
+		redirect "/admin/groups/#{@group.slug}"
+	end
 
 
 	post "/admin/groups/:slug/members/:username/delete" do
