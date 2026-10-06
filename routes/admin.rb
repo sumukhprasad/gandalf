@@ -12,22 +12,31 @@ helpers do
 end
 
 configure_routes do
-	
 	get "/admin" do
 		require_admin!
 
-		@users = User.all
 		erb :"admin/index"
 	end
-
-
-	get "/admin/create_user" do
+	
+	
+	
+	
+	# USERS
+	get "/admin/users" do
 		require_admin!
 
-		erb :"admin/create_user"
+		@users = User.all
+		erb :"admin/users/index"
 	end
 
-	post "/admin/create_user" do
+
+	get "/admin/users/create_user" do
+		require_admin!
+
+		erb :"admin/users/create_user"
+	end
+
+	post "/admin/users/create_user" do
 		require_admin!
 
 		User.create(
@@ -39,7 +48,7 @@ configure_routes do
 			created_at: Time.now
 		)
 
-		redirect "/admin"
+		redirect "/admin/users"
 	end
 
 
@@ -48,7 +57,7 @@ configure_routes do
 
 		@user = find_user!
 
-		erb :"admin/view_user"
+		erb :"admin/users/view_user"
 	end
 
 
@@ -57,7 +66,7 @@ configure_routes do
 
 		@user = find_user!
 
-		erb :"admin/edit_user"
+		erb :"admin/users/edit_user"
 	end
 
 
@@ -98,5 +107,5 @@ configure_routes do
 		)
 
 		redirect "/admin/users/#{@user.username}"
-	end
+	end	
 end

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	
+	<title>gandalf</title>
+
+	<%= erb :"_includes/head" %>
+</head>
+
+<body>
+	<%= erb :"_includes/navigation" %>
+	<%= erb :"_includes/admin/navigation" %>
+	
+	
+	<main>
+		<h1>Users</h1>
+		
+		
+		<table>
+			<thead>
+				<tr>
+					<th>
+						id
+					</th>
+					<th>
+						username
+					</th>
+					<th>
+						email
+					</th>
+					<th>
+						role
+					</th>
+					<th>
+						active?
+					</th>
+					<th>
+						actions
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				<% @users.each do |u| %>
+					<tr>
+						<td>
+							<%= u.id %>
+						</td>
+						<td>
+							<b><%= u.username %></b>
+						</td>
+						<td>
+							<%= u.email %>
+						</td>
+						<td>
+							<%= u.role %>
+						</td>
+						<td>
+							<%= u.active %>
+						</td>
+						<td>
+							<a href="/admin/users/<%= u.username %>">View</a> /
+							<a href="/admin/users/<%= u.username %>/edit">Edit</a> /
+							<a href="/admin/users/<%= u.username %>">Make <%= u.active ? "inactive" : "active" %></a>
+						</td>
+				  </tr>
+				<% end %>
+			</tbody>
+		</table>
+		
+		<a href="/admin/users/create_user">Provision a new user...</a>
+		
+	</main>
+
+	<%= erb :"_includes/footer" %>
+</body>
+</html>

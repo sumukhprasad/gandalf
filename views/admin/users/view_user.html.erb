@@ -12,12 +12,11 @@
 
 <body>
 	<%= erb :"_includes/navigation" %>
+	<%= erb :"_includes/admin/navigation" %>
 	
 	
 	<main>
-		<h1>Gandalf Administration -- View User</h1>
-		
-		<h1><%= @user.username %></h1>
+		<h1>View User <i><%= @user.username %></i></h1>
 
 		<p>
 			<strong>Email:</strong>

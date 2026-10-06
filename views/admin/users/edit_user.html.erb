@@ -12,10 +12,11 @@
 
 <body>
 	<%= erb :"_includes/navigation" %>
+	<%= erb :"_includes/admin/navigation" %>
 	
 	
 	<main>
-		<h1>Gandalf Administration -- Editing User <i><%= @user.username %></i></h1>
+		<h1>Editing User <i><%= @user.username %></i></h1>
 
 		<form method="post" action="/admin/users/<%= @user.id %>/edit">
 			<div>
@@ -59,7 +60,7 @@
 
 			<div>
 				<button type="submit">Save changes</button>
-				<a href="/admin/users/<%= @user.id %>">No, cancel</a>
+				<a href="/admin/users/<%= @user.username %>">No, cancel</a>
 			</div>
 		</form>
 

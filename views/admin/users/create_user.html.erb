@@ -12,13 +12,14 @@
 
 <body>
 	<%= erb :"_includes/navigation" %>
+	<%= erb :"_includes/admin/navigation" %>
 	
 	
 	<main>
-		<h1>Gandalf Administration -- Provision New User</h1>
+		<h1>Provision New User</h1>
 		
 	
-		<form action="/admin/create_user" method="post" accept-charset="utf-8">
+		<form action="/admin/users/create_user" method="post" accept-charset="utf-8">
 			<label for="username">Username: </label><input type="text" name="username" value=""><br>
 			<label for="email">Email: </label><input type="text" name="email" value=""><br>
 			<label for="email">Role (<i>default: member</i>): </label>
