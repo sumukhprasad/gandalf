@@ -4,6 +4,7 @@ require_relative "config/database"
 require_relative "models/user"
 require_relative "models/group"
 require_relative "models/membership"
+require_relative "models/claim"
 
 if User.all == []
 	User.create(

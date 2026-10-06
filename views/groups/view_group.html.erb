@@ -18,8 +18,50 @@
 		
 		<a href="/groups/<%= @group.slug %>/info">info</a>
 		
-		...
+		<h2>All Claims</h2>
+
+		
+		<a href="/groups/<%= @group.slug %>/claims/new">New claim...</a>
+		
+		
+		<% if @claims.empty? %>
+			<p>No claims have been made in this group.</p>
+		<% else %>
+			<table>
+				<thead>
+					<tr>
+						<th>Created at</th>
+						<th>Statement</th>
+						<th>Status</th>
+						<th>Last Updated</th>
+					</tr>
+				</thead>
+				<tbody>
+					<% @claims.each do |claim| %>
+						<tr>
+							<td>
+								<%= claim.created_at.strftime("%b %d, %Y, %-I:%M %p") %>
+							</td>
+							<td>
+								<a href="/groups/<%= @group.slug %>/claims/<%= claim.id %>">
+									<span style="font-size:1.5em"><%= claim.statement %></span>
+								</a>
+							</td>
+							<td>
+								<%= claim.status %>
+							</td>
+							<td>
+								<%= claim.updated_at.strftime("%b %d, %Y, %-I:%M %p") %>
+							</td>
+						</tr>
+					<% end %>
+				</tbody>
+			</table>
+		<% end %>
 	</main>
+	
+
+	
 	
 
 	<%= erb :"_includes/footer" %>

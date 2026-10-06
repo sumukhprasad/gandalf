@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	
+	<title>gandalf</title>
+
+	<%= erb :"_includes/head" %>
+	<script id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-svg.js"></script>
+</head>
+
+<body>
+	<%= erb :"_includes/navigation" %>
+	
+	<main>
+		
+		<h1>Submit a new claim to group <%= @group.name %></h1>
+
+		<form method="post" action="/groups/<%= @group.slug %>/claims">
+			<div>
+				<label for="statement">What was the statement of the claim?</label>
+				<br>
+				<input
+					type="text"
+					id="statement"
+					name="statement"
+					placeholder="Statement"
+					style="font-size:2.5em; max-width: 800px; width: 100vw;font-weight:bold;"
+					required
+				>
+			</div>
+
+			<br>
+
+			<div>
+				<label for="context">What was the context?</label>
+				<br>
+				<textarea
+					id="context"
+					name="context"
+					placeholder="Context"
+					style="font-size:1.5em; max-width: 800px; width: 100vw;"
+					required
+				></textarea>
+				
+				<h3>Preview:</h3>
+				<div id="preview">
+				</div>
+				<script>
+					document.getElementById("context").onchange = ()=>{
+						document.getElementById("preview").innerText = document.getElementById("context").value;
+						MathJax.typesetPromise([document.getElementById("preview")]);
+					}
+				</script>
+			</div>
+
+			<br>
+
+			<div>
+				<label for="claimant">Who made the claim?</label>
+				<br>
+				<input
+					type="text"
+					id="claimant"
+					name="claimant"
+					placeholder="Claimant"
+					required
+				>
+			</div>
+
+			<br>
+			
+			<div>
+			     <p>How do you feel about this claim?</p>
+				
+			     <input type="radio" name="initial_reaction" value="positive">
+			     <label for="html">Positive</label><br>
+			     <input type="radio" name="initial_reaction" value="neutral">
+			     <label for="css">Unsure</label><br>
+			     <input type="radio" name="initial_reaction" value="negative">
+			     <label for="javascript">Negative</label>
+			</div>
+			
+			<button type="submit">Submit claim</button>
+		</form>
+		
+	</main>
+	
+
+	<%= erb :"_includes/footer" %>
+</body>
+</html>

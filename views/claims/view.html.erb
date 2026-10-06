@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	
+	<title>gandalf</title>
+
+	<%= erb :"_includes/head" %>
+	<script id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-svg.js"></script>
+</head>
+
+<body>
+	<%= erb :"_includes/navigation" %>
+	
+	<main>
+
+		<p>
+			<a href="/groups/<%= @group.slug %>"><< back to group</a>
+		</p>
+		
+		<h1><%= @claim.statement %></h1>
+
+		<p>
+			posted at <%= @claim.created_at.strftime("%b %d, %Y, %-I:%M %p") %> by <strong><%= @claim.user.username %></strong> 
+
+		<span class="status">
+			<%= @claim.initial_reaction %> initial reaction
+		</span> 
+
+		<span class="status">
+			<%= @claim.status %>
+		</span>
+		</p>
+
+		<div>
+			<h3>Context</h3>
+			<div id="tex">
+				<%= @claim.context %>
+			</div>
+		</div>
+		<script>
+			MathJax.typesetPromise([document.getElementById("tex")]);
+		</script>
+
+		<% if @can_edit %>
+		<p>
+			<a href="/groups/<%= @group.slug %>/claims/<%= @claim.id %>/edit">
+				edit claim
+			</a>
+		</p>
+		<% end %>
+	</main>
+	
+
+	<%= erb :"_includes/footer" %>
+</body>
+</html>

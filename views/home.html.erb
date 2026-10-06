@@ -15,7 +15,54 @@
 	
 	
 	<main>
-		<h1>Gandalf is running!</h1>
+		<h1>Welcome to Gandalf!</h1>
+		
+		
+		
+		
+		<h2>My claims</h2>
+		<% if @claims.empty? %>
+			<p>No claims made yet.</p>
+		<% else %>
+			<table>
+				<thead>
+					<tr>
+						<th>Created at</th>
+						<th>Group</th>
+						<th>Statement</th>
+						<th>Status</th>
+						<th>Last Updated</th>
+					</tr>
+				</thead>
+				<tbody>
+					<% @claims.each do |claim| %>
+						<tr>
+							<td>
+								<%= claim.created_at.strftime("%b %d, %Y, %-I:%M %p") %>
+							</td>
+							<td>
+								<a href="/groups/<%= claim.group.slug %>/claims/<%= claim.id %>">
+									<%= claim.group.name %>
+								</a>
+							
+							</td>
+							<td>
+								<a href="/groups/<%= claim.group.slug %>/claims/<%= claim.id %>">
+									<span style="font-size:1.5em"><%= claim.statement %></span>
+								</a>
+							</td>
+							<td>
+								<%= claim.status %>
+							</td>
+							<td>
+								<%= claim.updated_at.strftime("%b %d, %Y, %-I:%M %p") %>
+							</td>
+						</tr>
+					<% end %>
+				</tbody>
+			</table>
+		<% end %>
+		
 	</main>
 
 	<%= erb :"_includes/footer" %>
