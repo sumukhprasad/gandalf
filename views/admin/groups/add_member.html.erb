@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	
+	<title>gandalf</title>
+
+	<%= erb :"_includes/head" %>
+</head>
+
+<body>
+	<%= erb :"_includes/navigation" %>
+	<%= erb :"_includes/admin/navigation" %>
+	
+	
+	<main>
+		<h1>Add member to group <i><%= @group.name %></i></h1>
+
+		<form method="post" action="/admin/groups/<%= @group.slug %>/members/add">
+			<div>
+				<label for="username">
+					Username
+				</label>
+
+				<input
+					type="text"
+					id="username"
+					name="username"
+					placeholder="username"
+					required
+				>
+			</div>
+
+			<div>
+				<label for="role">
+					Role
+				</label>
+
+				<select id="role" name="role">
+					<option value="member">member</option>
+					<option value="moderator">moderator</option>
+					<option value="moderator">verifier</option>
+				</select>
+			</div>
+
+			<button type="submit">
+				Add member
+			</button>
+		</form>
+	</main>
+
+	<%= erb :"_includes/footer" %>
+</body>
+</html>

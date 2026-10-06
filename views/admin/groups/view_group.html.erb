@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	
+	<title>gandalf</title>
+
+	<%= erb :"_includes/head" %>
+</head>
+
+<body>
+	<%= erb :"_includes/navigation" %>
+	<%= erb :"_includes/admin/navigation" %>
+	
+	
+	<main>
+		<h1>View Group <i><%= @group.name %></i></h1>
+
+		<p>
+			<strong>Name:</strong>
+			<%= @group.name %>
+		</p>
+
+		<p>
+			<strong>Slug:</strong>
+			<code><%= @group.slug %></code>
+		</p>
+
+		<p>
+			<strong>Created:</strong>
+			<%= @group.created_at %>
+		</p>
+
+		<p>
+			<a href="/admin/groups/<%= @group.slug %>/edit">edit</a>
+		</p>
+
+		
+		
+		<h2>Members</h2>
+		<% if @memberships.empty? %>
+			<p>This group has no members yet.</p>
+		<% else %>
+			<table>
+				<thead>
+					<tr>
+						<th>username</th>
+						<th>email</th>
+						<th>role</th>
+						<th>joined</th>
+						<th></th>
+					</tr>
+				</thead>
+
+				<tbody>
+					<% @memberships.each do |membership| %>
+						<tr>
+							<td>
+								<%= membership.user.username %>
+							</td>
+
+							<td>
+								<%= membership.user.email %>
+							</td>
+
+							<td>
+								<%= membership.role %>
+							</td>
+
+							<td>
+								<%= membership.created_at %>
+							</td>
+
+							<td>
+								<form
+									method="post"
+									action="/admin/groups/<%= @group.slug %>/members/<%= membership.user.username %>/delete"
+									onsubmit="return confirm('remove <%= membership.user.username %> from this group?')"
+								>
+									<button type="submit">
+										remove
+									</button>
+								</form>
+							</td>
+						</tr>
+					<% end %>
+				</tbody>
+			</table>
+		<% end %>
+		
+
+		<a href="/admin/groups/<%= @group.slug %>/members/add">Add new member...</a>
+	
+	</main>
+	<%= erb :"_includes/footer" %>
+</body>
+</html>

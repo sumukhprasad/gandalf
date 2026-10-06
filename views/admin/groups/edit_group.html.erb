@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	
+	<title>gandalf</title>
+
+	<%= erb :"_includes/head" %>
+</head>
+
+<body>
+	<%= erb :"_includes/navigation" %>
+	<%= erb :"_includes/admin/navigation" %>
+	
+	
+	<main>
+		<h1>Editing Group <i><%= @group.name %></i></h1>
+
+		<form method="post" action="/admin/groups/<%= @group.slug %>/edit">
+			<div>
+				<label for="name">Name</label>
+				<input
+					type="text"
+					id="name"
+					name="name"
+					value="<%= @group.name %>"
+					required
+				>
+			</div>
+
+			<div>
+				<label for="slug_new">Slug</label>
+				<input
+					type="text"
+					id="slug_new"
+					name="slug_new"
+					value="<%= @group.slug %>"
+					required
+				>
+			</div>
+
+			<div>
+				<button type="submit">Save changes</button>
+				<a href="/admin/groups/<%= @group.slug %>">No, cancel</a>
+			</div>
+		</form>
+
+		
+		
+	</main>
+
+	<%= erb :"_includes/footer" %>
+</body>
+</html>

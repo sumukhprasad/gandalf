@@ -2,6 +2,8 @@ require "sinatra/base"
 
 require_relative "config/database"
 require_relative "models/user"
+require_relative "models/group"
+require_relative "models/membership"
 
 if User.all == []
 	User.create(

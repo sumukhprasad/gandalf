@@ -16,9 +16,48 @@
 	
 	
 	<main>
-		<h1>Gandalf Administration</h1>
+		<h1>Groups</h1>
+		
+		<table>
+			<thead>
+				<tr>
+					<th>
+						id
+					</th>
+					<th>
+						name
+					</th>
+					<th>
+						slug
+					</th>
+					<th>
+						actions
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				<% @groups.each do |g| %>
+					<tr>
+						<td>
+							<%= g.id %>
+						</td>
+						<td>
+							<b><%= g.name %></b>
+						</td>
+						<td>
+							<code><%= g.slug %></code>
+						</td>
+						<td>
+							<a href="/admin/groups/<%= g.slug %>">View</a> /
+							<a href="/admin/groups/<%= g.slug %>/edit">Edit</a>
+						</td>
+				  </tr>
+				<% end %>
+			</tbody>
+		</table>
 		
 		
+		<a href="/admin/groups/create_group">Create a new group...</a>
 	</main>
 
 	<%= erb :"_includes/footer" %>

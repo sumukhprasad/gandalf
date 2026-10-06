@@ -16,11 +16,16 @@
 	
 	
 	<main>
-		<h1>Gandalf Administration</h1>
+		<h1>Create New Group</h1>
 		
-		<h2>Quick Links</h2>
-		<a href="/admin/users/create_user">Provision a new user...</a><br>
-		<a href="/admin/groups/create_group">Create a new group...</a>
+	
+		<form action="/admin/groups/create_group" method="post" accept-charset="utf-8">
+			<label for="username">Name: </label><input type="text" name="name" value=""><br>
+			<label for="email">Slug: </label><input type="text" name="slug" value=""><br>
+			<br>
+	
+			<p><input type="submit" value="Create"></p>
+		</form>
 		
 	</main>
 
