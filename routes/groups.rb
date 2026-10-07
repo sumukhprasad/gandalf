@@ -9,7 +9,7 @@ helpers do
 		@user = @current_user
 	end
 	
-	def can_edit_claim?(user, group, claim)
+	def is_moderator?(user, group, claim)
 		return true if user.role == "admin"
 		return true if claim.user_id == user.id
 
@@ -112,7 +112,7 @@ configure_routes do
 			.first
 
 		halt 404 unless @claim
-		@can_edit = can_edit_claim?(@user, @group, @claim)
+		@can_edit = is_moderator?(@user, @group, @claim)
 
 		erb :"claims/view"
 	end
@@ -128,7 +128,7 @@ configure_routes do
 			.first
 
 		halt 404 unless @claim
-		halt 403, "Not authorised." unless can_edit_claim?(@user, @group, @claim)
+		halt 403, "Not authorised." unless is_moderator?(@user, @group, @claim)
 
 		erb :"claims/edit"
 	end
@@ -144,7 +144,7 @@ configure_routes do
 			.first
 
 		halt 404 unless @claim
-		halt 403, "Not authorised." unless can_edit_claim?(@user, @group, @claim)
+		halt 403, "Not authorised." unless is_moderator?(@user, @group, @claim)
 
 		@claim.update(
 			statement: params[:statement],
