@@ -14,8 +14,14 @@ helpers do
 end
 
 configure_routes do
-	get "/users/login" do
-		erb :"users/login"
+	get "/users/:uname" do
+		require_login!
+		
+		@user =  User.first(username: params[:uname])
+		
+		halt 401, "No such user." unless @user
+		
+		erb :"users/public_view"
 	end
 	
 	# login
