@@ -31,22 +31,88 @@
 			<%= @group.created_at %>
 		</p>
 
-		
-		
 		<h2>Members</h2>
-		<% if @memberships.empty? %>
-			<p>this group has no members.</p>
-		<% else %>
-			<ul>
-				<% @memberships.each do |membership| %>
-					<li>
-						<strong><%= membership.user.username %></strong>
-						<span><%= membership.role %></span>
-					</li>
-				<% end %>
-			</ul>
+		<% if @is_mod %>
+			<i>You are a moderator of this group.</i>
 		<% end %>
 		
+		<% if @memberships.empty? %>
+			<p>This group has no members yet.</p>
+		<% else %>
+			<table>
+				<thead>
+					<tr>
+						<th>username</th>
+						<th>email</th>
+						<th>role</th>
+						<th>verifier?</th>
+
+						<% if @is_mod %>
+							<th>joined</th>
+							<th>edit</th>
+							<th>remove</th>
+						<% end %>
+					</tr>
+				</thead>
+
+				<tbody>
+					<% @memberships.each do |membership| %>
+						<tr>
+							<td>
+								<%= membership.user.username %>
+							</td>
+							
+							<td>
+								<% if @is_mod %>
+									<%= membership.user.email %>
+								<% else %>
+									redacted
+								<% end %>
+							</td>
+
+							<td>
+								<%= membership.role %>
+							</td>
+
+							<td>
+								<%= membership.is_verifier ? "yes" : "no" %>
+							</td>
+
+
+
+							<% if @is_mod %>
+							<td>
+								<%= membership.created_at %>
+							</td>
+							
+							<td>
+								<a href="/groups/<%= @group.slug %>/members/<%= membership.user.username %>/edit">
+									Edit
+								</a>
+							</td>
+
+							<td>
+								<form
+									method="post"
+									action="/groups/<%= @group.slug %>/members/<%= membership.user.username %>/delete"
+									onsubmit="return confirm('remove <%= membership.user.username %> from this group?')"
+								>
+									<button type="submit">
+										remove
+									</button>
+								</form>
+							</td>
+							<% end %>
+						</tr>
+					<% end %>
+				</tbody>
+			</table>
+		<% end %>
+
+
+		<% if @is_mod %>
+			<a href="/groups/<%= @group.slug %>/members/add">Add new member...</a>
+		<% end %>
 	</main>
 	
 

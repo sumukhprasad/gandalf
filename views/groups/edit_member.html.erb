@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	
+	<title>gandalf</title>
+
+	<%= erb :"_includes/head" %>
+</head>
+
+<body>
+	<%= erb :"_includes/navigation" %>
+	
+
+	<main>
+		<h1>
+			Edit <%= @membership.user.username %>'s membership in <i><%= @group.name %></i>
+		</h1>
+
+
+		<form method="post" action="/groups/<%= @group.slug %>/members/<%= @membership.user.username %>/edit">
+			<div>
+				<label for="role">
+					Role
+				</label>
+
+				<select id="role" name="role">
+					<option
+						value="member"
+						<%= "selected" if @membership.role == "member" %>
+					>
+						member
+					</option>
+
+					<option
+						value="moderator"
+						<%= "selected" if @membership.role == "moderator" %>
+					>
+						moderator
+					</option>
+				</select>
+			</div>
+			
+			<div>
+				<label for="is_verifier">
+					Verifier? 
+				</label>
+				
+				<input type="checkbox" name="is_verifier" <%= "checked" if @membership.is_verifier %>>
+			</div>
+
+			<button type="submit">
+				Save changes
+			</button>
+		</form>
+
+		<a href="/admin/groups/<%= @group.slug %>">
+			Cancel
+		</a>
+	</main>
+	
+
+	<%= erb :"_includes/footer" %>
+</body>
+</html>

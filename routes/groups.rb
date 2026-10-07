@@ -9,9 +9,13 @@ helpers do
 		@user = @current_user
 	end
 	
-	def is_moderator?(user, group, claim)
-		return true if user.role == "admin"
+	def can_edit_claim?(user, group, claim)
 		return true if claim.user_id == user.id
+		return is_moderator?(user, group)
+	end
+	
+	def is_moderator?(user, group)
+		return true if user.role == "admin"
 
 		membership = Membership
 			.where(
@@ -35,7 +39,6 @@ configure_routes do
 	
 	get "/groups/:slug" do
 		find_current_user!
-
 		@group = @user.groups_dataset.where(slug: params[:slug]).first
 
 		halt 404 unless @group
@@ -51,8 +54,8 @@ configure_routes do
 	
 	get "/groups/:slug/info" do
 		find_current_user!
-
 		@group = @user.groups_dataset.where(slug: params[:slug]).first
+		@is_mod = is_moderator?(@user, @group)
 		
 		halt 404 unless @group
 
@@ -66,7 +69,6 @@ configure_routes do
 
 	get "/groups/:slug/claims/new" do
 		find_current_user!
-
 		@group = @user.groups_dataset.where(slug: params[:slug]).first
 		halt 404 unless @group
 
@@ -75,7 +77,6 @@ configure_routes do
 
 	post "/groups/:slug/claims" do
 		find_current_user!
-
 		@group = @user.groups_dataset.where(slug: params[:slug]).first
 		halt 404 unless @group
 
@@ -102,7 +103,6 @@ configure_routes do
 
 	get "/groups/:slug/claims/:id" do
 		find_current_user!
-
 		@group = @user.groups_dataset.where(slug: params[:slug]).first
 		halt 404 unless @group
 
@@ -112,14 +112,13 @@ configure_routes do
 			.first
 
 		halt 404 unless @claim
-		@can_edit = is_moderator?(@user, @group, @claim)
+		@can_edit = can_edit_claim?(@user, @group, @claim)
 
 		erb :"claims/view"
 	end
 
 	get "/groups/:slug/claims/:id/edit" do
 		find_current_user!
-
 		@group = @user.groups_dataset.where(slug: params[:slug]).first
 		halt 404 unless @group
 
@@ -128,14 +127,13 @@ configure_routes do
 			.first
 
 		halt 404 unless @claim
-		halt 403, "Not authorised." unless is_moderator?(@user, @group, @claim)
+		halt 403, "Not authorised." unless can_edit_claim?(@user, @group, @claim)
 
 		erb :"claims/edit"
 	end
 
 	post "/groups/:slug/claims/:id/edit" do
 		find_current_user!
-
 		@group = @user.groups_dataset.where(slug: params[:slug]).first
 		halt 404 unless @group
 
@@ -144,7 +142,7 @@ configure_routes do
 			.first
 
 		halt 404 unless @claim
-		halt 403, "Not authorised." unless is_moderator?(@user, @group, @claim)
+		halt 403, "Not authorised." unless can_edit_claim?(@user, @group, @claim)
 
 		@claim.update(
 			statement: params[:statement],
@@ -161,5 +159,127 @@ configure_routes do
 		end
 
 		erb :"claims/edit"
+	end
+	
+	
+	
+	
+	
+	
+	
+	
+	get "/groups/:slug/members/add" do		
+		find_current_user!
+		@group = @user.groups_dataset.where(slug: params[:slug]).first
+		halt 404 unless @group
+		halt 403 unless is_moderator?(@user, @group)
+
+		erb :"groups/add_member"
+	end
+	
+
+	post "/groups/:slug/members/add" do
+		find_current_user!
+		@group = @user.groups_dataset.where(slug: params[:slug]).first
+		halt 404 unless @group
+		halt 403 unless is_moderator?(@user, @group)
+
+		username = params[:username].to_s.strip
+
+		halt 404, "No username" unless username
+
+		user = User.where(username: username).first
+
+		halt 404, "User not found" unless user
+
+		membership = Membership.where(
+			group_id: @group.id,
+			user_id: user.id
+		).first
+
+		if membership
+			halt 403, "Already a member"
+		else
+			Membership.create(
+				group_id: @group.id,
+				user_id: user.id,
+				role: params[:role].to_s.strip.empty? ? "member" : params[:role],
+				is_verifier: params[:is_verifier] == nil ? false : true,
+				created_at: Time.now
+			)
+		end
+
+		redirect "/groups/#{@group.slug}/info"
+	end
+	
+	
+	get "/groups/:slug/members/:username/edit" do
+		find_current_user!
+		@group = @user.groups_dataset.where(slug: params[:slug]).first
+		halt 404 unless @group
+		halt 403 unless is_moderator?(@user, @group)
+
+		user = User.where(username: params[:username]).first
+		halt 404, "User not found" unless user
+
+		@membership = Membership.where(
+			group_id: @group.id,
+			user_id: user.id
+		).first
+
+		halt 404, "Membership not found" unless @membership
+
+		erb :"groups/edit_member"
+	end
+	
+	post "/groups/:slug/members/:username/edit" do
+		find_current_user!
+		@group = @user.groups_dataset.where(slug: params[:slug]).first
+		halt 404 unless @group
+		halt 403 unless is_moderator?(@user, @group)
+
+		user = User.where(username: params[:username]).first
+		halt 404, "User not found" unless user
+
+		membership = Membership.where(
+			group_id: @group.id,
+			user_id: user.id
+		).first
+
+		halt 404, "Membership not found" unless membership
+
+		role = params[:role].to_s.strip
+
+		halt 400, "Invalid role" unless %w[member moderator].include?(role)
+
+		membership.update(
+			role: role,
+			is_verifier: params[:is_verifier]
+		)
+
+		redirect "/groups/#{@group.slug}/info"
+	end
+
+
+	post "/groups/:slug/members/:username/delete" do
+		find_current_user!
+		@group = @user.groups_dataset.where(slug: params[:slug]).first
+		halt 404 unless @group
+		halt 403 unless is_moderator?(@user, @group)
+
+		user = User.where(username: params[:username]).first
+
+		halt 404, "User not found" unless user
+
+		membership = Membership.where(
+			group_id: @group.id,
+			user_id: user.id
+		).first
+
+		halt 404, "Not a member" unless membership
+
+		membership.delete
+
+		redirect "/groups/#{@group.slug}"
 	end
 end
