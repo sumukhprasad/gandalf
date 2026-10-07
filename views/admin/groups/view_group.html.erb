@@ -49,6 +49,7 @@
 						<th>username</th>
 						<th>email</th>
 						<th>role</th>
+						<th>verifier?</th>
 						<th>joined</th>
 						<th>edit</th>
 						<th>remove</th>
@@ -68,6 +69,10 @@
 
 							<td>
 								<%= membership.role %>
+							</td>
+
+							<td>
+								<%= membership.is_verifier ? "yes" : "no" %>
 							</td>
 
 							<td>

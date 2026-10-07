@@ -41,14 +41,15 @@
 					>
 						moderator
 					</option>
-
-					<option
-						value="verifier"
-						<%= "selected" if @membership.role == "verifier" %>
-					>
-						verifier
-					</option>
 				</select>
+			</div>
+			
+			<div>
+				<label for="is_verifier">
+					Verifier? 
+				</label>
+				
+				<input type="checkbox" name="is_verifier" <%= "checked" if @membership.is_verifier %>>
 			</div>
 
 			<button type="submit">

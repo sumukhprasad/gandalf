@@ -7,6 +7,7 @@ Sequel.migration do
 			foreign_key :user_id, null: false
 			
 			String :role, null: false, default: "member"
+			TrueClass :is_verifier, null: false, default: false
 
 			DateTime :created_at, null: false
 			

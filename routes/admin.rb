@@ -207,12 +207,13 @@ configure_routes do
 		).first
 
 		if membership
-			halt 403, "Already a member" unless user
+			halt 403, "Already a member"
 		else
 			Membership.create(
 				group_id: @group.id,
 				user_id: user.id,
 				role: params[:role].to_s.strip.empty? ? "member" : params[:role],
+				is_verifier: params[:is_verifier] == nil ? false : true,
 				created_at: Time.now
 			)
 		end
@@ -256,10 +257,11 @@ configure_routes do
 
 		role = params[:role].to_s.strip
 
-		halt 400, "Invalid role" unless %w[member moderator verifier].include?(role)
+		halt 400, "Invalid role" unless %w[member moderator].include?(role)
 
 		membership.update(
-			role: role
+			role: role,
+			is_verifier: params[:is_verifier]
 		)
 
 		redirect "/admin/groups/#{@group.slug}"
