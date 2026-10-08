@@ -6,6 +6,9 @@ require_relative "models/group"
 require_relative "models/membership"
 require_relative "models/claim"
 require_relative "models/assignment"
+require_relative "models/verification"
+require_relative "models/verification_issue"
+require_relative "models/verification_source"
 
 
 require_relative "lib/assignments"

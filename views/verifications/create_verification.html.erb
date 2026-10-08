@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	
+	<title>gandalf</title>
+
+	<%= erb :"_includes/head" %>
+	<script id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-svg.js"></script>
+</head>
+
+<body>
+	<%= erb :"_includes/navigation" %>
+	
+	
+	<main>
+		<h1>Verify claim</h1>
+
+
+		<div class="boxed">
+			<h1><%= @claim.statement %></h1>
+		
+			<p>
+				posted at <%= @claim.created_at.strftime("%b %d, %Y, %-I:%M %p") %> by <strong><%= @claim.user.username %></strong> 
+
+			<span class="status">
+				<%= @claim.initial_reaction %> initial reaction
+			</span> 
+
+			<span class="status">
+				<%= @claim.status %>
+			</span>
+			</p>
+
+			<div>
+				<h3>Context</h3>
+				<div id="tex">
+					<%= @claim.context %>
+				</div>
+			</div>
+			<script>
+				MathJax.typesetPromise([document.getElementById("tex")]);
+			</script>
+		</div>
+	
+		
+
+		<h1>Verification Details</h1>
+		
+		<form action="/verify_assignment/<%= @assignment.id %>" method="post">
+			<div>
+				<h2>Interpretation</h2>
+				
+				<label for="interpretation">What did you understand this claim to mean?</label><br>
+				<textarea required
+					name="interpretation"
+					style="max-width: 800px; width: 100vw;"
+				></textarea>
+			</div>
+			<div>
+				<h2>Verdict</h2>
+				
+				<label for="verdict">What is your verdict?</label><br>
+				<input type="radio" required name="verdict" value="supported"> The claim is supported by suitable evidence.<br>
+				<input type="radio" required name="verdict" value="contradicted"> The claim is contradicted by suitable evidence.<br>
+				<input type="radio" required name="verdict" value="inconclusive"> Not enough evidence / vague/ etc.<br>
+			</div>
+			<div>
+				<h2>Confidence</h2>
+				<input type="radio" required name="confidence" value="high"> High<br>
+				<input type="radio" required name="confidence" value="medium"> Medium<br>
+				<input type="radio" required name="confidence" value="low"> Low<br>
+			</div>
+			<div>
+				<h2>Problems</h2>
+				<input type="checkbox" name="problems[]" value="vague_claim"> Claim was vague in nature.<br>
+				<input type="checkbox" name="problems[]" value="insufficient_context"> Context provided for the claim was insufficient.<br>
+				<input type="checkbox" name="problems[]" value="conflicting_sources"> The claim has conflicting sources of evidence.<br>
+				<input type="checkbox" name="problems[]" value="insufficient_evidence"> Sufficient evidence cannot be found.<br>
+				<input type="checkbox" name="problems[]" value="source_unavailable"> Sources are unavailable.<br>
+				<input type="checkbox" name="problems[]" value="source_inaccessible"> Sources are inaccessible.<br>
+				<input type="checkbox" name="problems[]" value="translation_issue"> Translation issue.<br>
+				<input type="checkbox" name="problems[]" value="other"> Other<br>
+			</div>
+			<div>
+				<h2>Sources</h2>
+				<div id="sources">
+					
+				</div>
+				<button type="button" onclick="addNewSource();">+ add source</button>
+				<input type="hidden" id="source_count" name="source_count" value="0">
+				<script>
+					var counter = 1;
+					function addNewSource() {
+						var container = document.getElementById('sources');
+						var newSourceTemplate = `
+							<h3>Source #${counter}</h3>
+							<p><label for="sources[${counter}][title]">Title</label><br>
+							<input type="text" required name="sources[${counter}][title]"></p>
+						
+							<p><label for="sources[${counter}][author]">Author</label><br>
+							<input type="text" name="sources[${counter}][author]"></p>
+						
+							<p><label for="sources[${counter}][URL]">URL</label><br>
+							<input type="text" name="sources[${counter}][URL]"></p>
+						
+							<p><label for="sources[${counter}][relationship]">Source Type</label><br>
+							<select required name="sources[${counter}][type]">
+								<option value="book">book</option>
+								<option value="webpage">webpage</option>
+								<option value="document">document</option>
+								<option value="textbook">textbook</option>
+								<option value="lecture_material">lecture material</option>
+								<option value="other">other</option>
+							</select></p>
+						
+							<p><label for="sources[${counter}][relationship]">Relationship</label><br>
+							<input type="radio" required name="sources[${counter}][relationship]" value="supports"> Supports claim<br>
+							<input type="radio" required name="sources[${counter}][relationship]" value="contradicts"> Contradicts claim<br>
+							<input type="radio" required name="sources[${counter}][relationship]" value="context"> Adds context<br></p>
+						
+							<p><label for="sources[${counter}][exerpt]">Excerpt</label><br>
+							<textarea 
+								name="sources[${counter}][exerpt]"
+								style="max-width: 800px; width: 100vw;"
+							></textarea></p>
+						
+							<p><label for="sources[${counter}][loc]">Location in source</label><br>
+							<input type="text" name="sources[${counter}][loc]"></p>
+						
+						
+							<p><label for="sources[${counter}][relevance]">Why is this relevant?</label><br>
+							<input type="text" name="sources[${counter}][relevance]"></p>
+						`;
+						
+						var source = document.createElement("div");
+						source.style.cssText = "padding: 10px; border: 1px solid black; margin-bottom: 10px;";
+						source.innerHTML = newSourceTemplate;
+						
+						container.appendChild(source);
+						counter++;
+						document.getElementById("source_count").value = counter - 1;
+					}
+				</script>
+			</div>
+			<div>
+				<h2>Reasoning</h2>
+				
+				<label for="reasoning">How did you arrive at your verdict?</label><br>
+				<textarea required
+					name="reasoning"
+					style="max-width: 800px; width: 100vw;"
+				></textarea>
+			</div>
+			<div>
+				<h2>Limitations</h2>
+				
+				<label for="limitations">What should someone reading this verification be cautious about?</label><br>
+				<textarea 
+					name="limitations"
+					style="max-width: 800px; width: 100vw;"
+				></textarea>
+			</div>
+			<div>
+				<h2>Assumptions</h2>
+				
+				<label for="assumptions">Did you have to make any assumptions?</label><br>
+				<textarea 
+					name="assumptions"
+					style="max-width: 800px; width: 100vw;"
+				></textarea>
+			</div>
+				
+			
+			<input type="submit" value="Submit verification">
+		</form>
+		
+	</main>
+
+	<%= erb :"_includes/footer" %>
+</body>
+</html>

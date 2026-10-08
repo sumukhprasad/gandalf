@@ -12,4 +12,8 @@ class Claim < Sequel::Model(:claims)
 	def active_assignment
 		assignments_dataset.where(status: "active").first
 	end
+	
+	def completed_assignment
+		assignments_dataset.where(status: "completed").first
+	end
 end

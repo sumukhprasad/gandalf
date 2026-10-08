@@ -185,6 +185,7 @@ configure_routes do
 
 		halt 404 unless @claim
 		halt 403 unless can_edit_claim?(@user, @group, @claim)
+		halt 403 unless !@claim.status=="completed"
 
 		@eligible = Assignments.eligible_verifiers(@claim)
 
@@ -214,6 +215,7 @@ configure_routes do
 
 		halt 404 unless @claim
 		halt 403 unless can_edit_claim?(@user, @group, @claim)
+		halt 403 unless !@claim.status=="completed"
 
 		verifier = User[params[:verifier_id]]
 

@@ -33,7 +33,7 @@
 			<%= @claim.status %>
 		</span>
 	
-		<% if @is_moderator %>
+		<% if @is_moderator && @claim.status!="completed" %>
 			| <a href="/groups/<%= @group.slug %>/claims/<%= @claim.id %>/assignment">
 				View/edit assignment
 			</a>
@@ -57,6 +57,88 @@
 			</a>
 		</p>
 		<% end %>
+		
+		
+		<hr>
+		
+		<% if @claim.status=="completed" %>
+		
+		<h1>Verification</h1>
+
+		<p>
+			posted at <%= @claim.completed_assignment.verification.submitted_at.strftime("%b %d, %Y, %-I:%M %p") %> by <a href="/user/<%= @claim.completed_assignment.verifier.username %>"><strong><%= @claim.completed_assignment.verifier.username %></strong></a>
+		</p>
+		
+		<% @verification = @claim.completed_assignment.verification %>
+
+		
+		<h2>Details</h2>
+		<p>
+			<strong>Interpretted claim:</strong><br>
+			<%= @verification.interpreted_claim %>
+		</p>
+		
+		<p>
+			Verdict: <strong><%= @verification.verdict %></strong><br>
+			Confidence: <strong><%= @verification.confidence %></strong>
+		</p>
+		
+		<p>
+			<strong>Reasoning:</strong><br>
+			<%= @verification.explanation %>
+		</p>
+		
+		<p>
+			<strong>Assumptions made:</strong><br>
+			<%= @verification.assumptions %>
+		</p>
+		
+		<p>
+			<strong>Limitations</strong><br>
+			<%= @verification.limitations %>
+		</p>
+		
+		<% if @verification.issues %>
+			<h2>Sources</h2>
+			<% @verification.sources.each do |source| %>
+			<div class="boxed">
+				<h3><%= source.title %> (<%=  source.author == "" ? "no author" : source.author %>)</h3>
+				<p>
+					URL: <a href="<%= source.url %>"><%= source.url %></a><br>
+					Type: <%= source.source_type %><br>
+					Relation: <%= source.relation %>
+				</p>
+				
+				<p>
+					Excerpt (if any):<br><%= source.excerpt %>
+				</p>
+				
+				<p>
+					Location (if any):<br><%= source.location %>
+				</p>
+				
+				<p>
+					Relevance (if any):<br><%= source.relevance %>
+				</p>
+			</div>
+			<% end %>
+		<% end %>
+		
+		
+
+		<% if @verification.issues %>
+			<h2>Problems with claim (if any)</h2>
+			<ul>
+				<% @verification.issues.each do |problem| %>
+					<li><%= problem.issue %></li>
+				<% end %>
+			</ul>
+		<% end %>
+			
+			
+		<% end %>
+		
+		
 	</main>
 	
 
