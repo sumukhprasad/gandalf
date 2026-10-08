@@ -94,6 +94,11 @@ configure_routes do
 
 		if @claim.valid?
 			@claim.save
+			
+			if Assignments.auto_assign?
+				Assignments.auto_assign(@claim, actor: @user)
+			end
+			# else email mods...
 
 			redirect "/groups/#{@group.slug}/claims/#{@claim.id}"
 		end
@@ -112,6 +117,7 @@ configure_routes do
 			.first
 
 		halt 404 unless @claim
+		@is_moderator = is_moderator?(@user, @group)
 		@can_edit = can_edit_claim?(@user, @group, @claim)
 
 		erb :"claims/view"
@@ -159,6 +165,98 @@ configure_routes do
 		end
 
 		erb :"claims/edit"
+	end
+
+
+
+	get "/groups/:slug/claims/:id/assignment" do
+		find_current_user!
+
+		@group = @user.groups_dataset
+			.where(slug: params[:slug])
+			.first
+
+		halt 404 unless @group
+		halt 403 unless is_moderator?(@user, @group)
+
+		@claim = @group.claims_dataset
+			.where(id: params[:id])
+			.first
+
+		halt 404 unless @claim
+		halt 403 unless can_edit_claim?(@user, @group, @claim)
+
+		@eligible = Assignments.eligible_verifiers(@claim)
+
+		@suggested = Assignments.recommend(@claim)
+
+		@assignment_counts = Assignments.assignment_counts(
+			@eligible,
+			since: Time.now - Assignments::WINDOW
+		)
+
+		erb :"assignments/assignment"
+	end
+	
+	post "/groups/:slug/claims/:id/assignment" do
+		find_current_user!
+
+		@group = @user.groups_dataset
+			.where(slug: params[:slug])
+			.first
+
+		halt 404 unless @group
+		halt 403 unless is_moderator?(@user, @group)
+
+		@claim = @group.claims_dataset
+			.where(id: params[:id])
+			.first
+
+		halt 404 unless @claim
+		halt 403 unless can_edit_claim?(@user, @group, @claim)
+
+		verifier = User[params[:verifier_id]]
+
+		halt 400, "Invalid verifier." unless verifier
+
+		Assignments.assign_to(
+			@claim,
+			verifier,
+			actor: @user,
+			reason: "manual assignment"
+		)
+
+		redirect "/groups/#{@group.slug}/claims/#{@claim.id}"
+	end
+	
+	post "/groups/:slug/claims/:id/assignment/rescind" do
+		find_current_user!
+
+		@group = @user.groups_dataset
+			.where(slug: params[:slug])
+			.first
+
+		halt 404 unless @group
+		halt 403 unless is_moderator?(@user, @group)
+
+		@claim = @group.claims_dataset
+			.where(id: params[:id])
+			.first
+
+		halt 404 unless @claim
+		halt 403 unless can_edit_claim?(@user, @group, @claim)
+
+		assignment = @claim.active_assignment
+
+		halt 404 unless assignment
+
+		Assignments.rescind(
+			assignment,
+			actor: @user,
+			reason: params[:reason]
+		)
+
+		redirect "/groups/#{@group.slug}/claims/#{@claim.id}/assignment"
 	end
 	
 	
@@ -254,7 +352,7 @@ configure_routes do
 
 		membership.update(
 			role: role,
-			is_verifier: params[:is_verifier]
+			is_verifier: params[:is_verifier] == nil ? false : true
 		)
 
 		redirect "/groups/#{@group.slug}/info"

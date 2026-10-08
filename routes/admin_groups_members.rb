@@ -89,7 +89,7 @@ configure_routes do
 
 		membership.update(
 			role: role,
-			is_verifier: params[:is_verifier]
+			is_verifier: params[:is_verifier] == nil ? false : true
 		)
 
 		redirect "/admin/groups/#{@group.slug}"

@@ -23,7 +23,7 @@
 		<h1><%= @claim.statement %></h1>
 
 		<p>
-			posted at <%= @claim.created_at.strftime("%b %d, %Y, %-I:%M %p") %> by <strong><%= @claim.user.username %></strong> 
+			posted at <%= @claim.created_at.strftime("%b %d, %Y, %-I:%M %p") %> by <a href="/user/<%= @claim.user.username %>"><strong><%= @claim.user.username %></strong></a>
 
 		<span class="status">
 			<%= @claim.initial_reaction %> initial reaction
@@ -32,6 +32,12 @@
 		<span class="status">
 			<%= @claim.status %>
 		</span>
+	
+		<% if @is_moderator %>
+			| <a href="/groups/<%= @group.slug %>/claims/<%= @claim.id %>/assignment">
+				View/edit assignment
+			</a>
+		<% end %>
 		</p>
 
 		<div>

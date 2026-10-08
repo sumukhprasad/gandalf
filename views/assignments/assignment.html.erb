@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	
+	<title>gandalf</title>
+
+	<%= erb :"_includes/head" %>
+	<script id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-svg.js"></script>
+</head>
+
+<body>
+	<%= erb :"_includes/navigation" %>
+	
+	<main>
+		<h2>Manual Assignment for Claim</h2>
+
+		<div class="boxed">
+			<h1><%= @claim.statement %></h1>
+		
+			<p>
+				posted at <%= @claim.created_at.strftime("%b %d, %Y, %-I:%M %p") %> by <strong><%= @claim.user.username %></strong> 
+
+			<span class="status">
+				<%= @claim.initial_reaction %> initial reaction
+			</span> 
+
+			<span class="status">
+				<%= @claim.status %>
+			</span>
+			</p>
+
+			<div>
+				<h3>Context</h3>
+				<div id="tex">
+					<%= @claim.context %>
+				</div>
+			</div>
+			<script>
+				MathJax.typesetPromise([document.getElementById("tex")]);
+			</script>
+		</div>
+
+		<% if !@claim.active_assignment %>
+		<h2>Gandalf recommends:</h2>
+		Assign to <b><%= @suggested.username %></b>.
+		
+		<form action="/groups/<%= @group.slug %>/claims/<%= @claim.id %>/assignment" method="post">
+			<input type="hidden" name="verifier_id" value="<%= @suggested.id %>">
+			<p><input type="submit" value="Quick Assign to <%= @suggested.username %>"></p>
+		</form>
+		
+		
+		
+		<h2>Recent assignments:</h2>
+		<table>
+			<thead>
+				<tr>
+					<th>username</th>
+					<th>recent assignments</th>
+				</tr>
+			</thead>
+			<tbody>
+				<% @assignment_counts.each do |c| %>
+					<tr><td><%= User.where(id: c[0]).first.username %></td> <td><%= c[1] %></td></tr>
+				<% end %>
+			</tbody>
+		</table>
+		
+		
+		
+		<h2>Override reccomendation</h2>
+		<form action="/groups/<%= @group.slug %>/claims/<%= @claim.id %>/assignment" method="post">
+			<% @eligible.each do |e| %>
+				<input type="radio" name="verifier_id" value="<%= e.id %>"
+				<%= "checked" if e.id == @suggested.id %>
+				><%= e.username %> <%= "(recommended)" if e.id == @suggested.id %><br>
+			<% end %>
+		
+			<p><input type="submit" value="Assign to selected"></p>
+		</form>
+		<% else %>
+		<h2>Claim assigned!</h2>
+		
+		<p>This claim was assigned to <b><%= User.where(id: @claim.active_assignment.verifier_id).first.username %></b> by actor <b><%= User.where(id: @claim.active_assignment.created_by).first.username %></b> for reason <b><%= @claim.active_assignment.reason %></b>.</p>
+			
+			<h2>Not satisfied?</h2>
+			<form action="/groups/<%= @group.slug %>/claims/<%= @claim.id %>/assignment/rescind" method="post">
+				<label for="reason:">Reason:</label><input type="text" name="reason">
+			
+				<p><input type="submit" value="Rescind"></p>
+			</form>
+		<% end %>
+	</main>
+	
+
+	<%= erb :"_includes/footer" %>
+</body>
+</html>

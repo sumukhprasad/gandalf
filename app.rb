@@ -5,6 +5,10 @@ require_relative "models/user"
 require_relative "models/group"
 require_relative "models/membership"
 require_relative "models/claim"
+require_relative "models/assignment"
+
+
+require_relative "lib/assignments"
 
 if User.all == []
 	User.create(
@@ -23,6 +27,7 @@ class Gandalf < Sinatra::Base
 	set :views, File.expand_path("views", __dir__)
 	set :public_folder, File.expand_path("public", __dir__)
 	enable :sessions
+	set :session_secret, ENV.fetch('SESSION_SECRET')
 	
 	before do
 		@current_user = User[session[:user_id]] if session[:user_id]
