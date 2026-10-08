@@ -17,6 +17,55 @@
 	<main>
 		<h1>Welcome to Gandalf!</h1>
 		
+		<% if !@assignments.empty?  %>
+			<h2>My Pending Assignments</h2>
+			<table>
+				<thead>
+					<tr>
+						<th>Assigned at</th>
+						<th>Group</th>
+						<th>Statement</th>
+						<th>Assigned by</th>
+						<th>Why?</th>
+						<th>Verify</th>
+					</tr>
+				</thead>
+				<tbody>
+					<% @assignments.each do |assignment| %>
+						<% claim = Claim.where(id: assignment.claim_id).first %>
+						<% createdby_user = User.where(id: assignment.created_by).first %>
+						<tr>
+							<td>
+								<%= assignment.assigned_at.strftime("%b %d, %Y, %-I:%M %p") %>
+							</td>
+							<td>
+								<a href="/groups/<%= claim.group.slug %>">
+									<%= claim.group.name %>
+								</a>
+							</td>
+							<td>
+								<a href="/groups/<%= claim.group.slug %>/claims/<%= claim.id %>">
+									<span style="font-size:1.5em"><%= claim.statement %></span>
+								</a>
+							</td>
+							<td>
+								<a href="/user/<%= createdby_user.username %>">
+									<%= createdby_user.username %>
+								</a>
+							</td>
+							<td>
+								<%= assignment.reason %>
+							</td>
+							<td>
+								<a href="/verify_assignment/<%= assignment.id %>">
+									Verify >
+								</a>
+							</td>
+						</tr>
+					<% end %>
+				</tbody>
+			</table>
+		<% end %>
 		
 		
 		
