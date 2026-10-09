@@ -25,14 +25,24 @@ configure_routes do
 	post "/admin/users/create_user" do
 		require_admin!
 
-		User.create(
-			username: params[:username],
-			email: params[:email],
-			token_hash: "",
-			role: params[:role] || "member",
-			active: true,
-			created_at: Time.now
-		)
+		DB.transaction do
+			User.create(
+				username: params[:username],
+				email: params[:email],
+				token_hash: "",
+				role: params[:role] || "member",
+				active: true,
+				created_at: Time.now
+			)
+		
+		     Notifications.enqueue(
+				recipient: params[:email],
+				kind: "new_user",
+				payload: {
+				  "username" =>  params[:username]
+				}
+		     )
+		end
 
 		redirect "/admin/users"
 	end

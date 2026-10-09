@@ -84,6 +84,16 @@ module Assignments
 				status: "active",
 				reason: reason
 			)
+			
+		     Notifications.enqueue(
+		     	recipient: verifier.email,
+		     	kind: "assignment_created",
+		     	payload: {
+		     		"assignment_id" => assignment.id,
+		     		"reason" => reason,
+		     		"claim_id" => claim.id
+		     	}
+		     )
 
 			claim.update(status: "assigned")
 

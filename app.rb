@@ -12,6 +12,7 @@ require_relative "models/verification_source"
 
 
 require_relative "lib/assignments"
+require_relative "lib/notifications"
 
 if User.all == []
 	User.create(

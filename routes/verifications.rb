@@ -106,6 +106,16 @@ configure_routes do
 			assignment.claim.update(
 				status: "completed"
 			)
+			
+
+		     Notifications.enqueue(
+		     	recipient: User[assignment.claim.user_id].email,
+		     	kind: "verification_submitted",
+		     	payload: {
+		     		"assignment_id" => assignment.id,
+		     		"verifier_id" => @user.id
+		     	}
+		     )
 		end
 
 		redirect "/groups/#{assignment.claim.group.slug}/claims/#{assignment.claim.id}"
