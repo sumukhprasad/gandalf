@@ -67,6 +67,17 @@
 
 		<p>
 			posted at <%= @claim.completed_assignment.verification.submitted_at.strftime("%b %d, %Y, %-I:%M %p") %> by <a href="/user/<%= @claim.completed_assignment.verifier.username %>"><strong><%= @claim.completed_assignment.verifier.username %></strong></a>
+			
+			<% if @claim.completed_assignment.verification.accepted_at %>
+				<p>
+					accepted by
+					<%= @claim.completed_assignment.verification.accepted_by_user .username %>
+				</p>
+			<% elsif @can_edit %>
+				<form action="/groups/<%= @group.slug %>/claims/<%= @claim.id %>/accept_verification" method="post">
+					<button type="submit">Accept verification</button>
+				</form>
+			<% end %>
 		</p>
 		
 		<% @verification = @claim.completed_assignment.verification %>
@@ -74,7 +85,7 @@
 		
 		<h2>Details</h2>
 		<p>
-			<strong>Interpretted claim:</strong><br>
+			<strong>Interpreted claim:</strong><br>
 			<%= @verification.interpreted_claim %>
 		</p>
 		
@@ -102,7 +113,7 @@
 			<h2>Sources</h2>
 			<% @verification.sources.each do |source| %>
 			<div class="boxed">
-				<h3><%= source.title %> (<%=  source.author == "" ? "no author" : source.author %>)</h3>
+				<h3><%= source.title %> (<%=	source.author == "" ? "no author" : source.author %>)</h3>
 				<p>
 					URL: <a href="<%= source.url %>"><%= source.url %></a><br>
 					Type: <%= source.source_type %><br>

@@ -11,6 +11,11 @@ class Verification < Sequel::Model
 			  class: :VerificationIssue,
 			  key: :verification_id
 
+
+	many_to_one :accepted_by_user,
+			  class: :User,
+			  key: :accepted_by
+
 	VERDICTS = %w[
 		supported
 		contradicted

@@ -261,6 +261,36 @@ configure_routes do
 		redirect "/groups/#{@group.slug}/claims/#{@claim.id}/assignment"
 	end
 	
+	post "/groups/:slug/claims/:id/accept_verification" do
+		find_current_user!
+
+		@group = @user.groups_dataset
+			.where(slug: params[:slug])
+			.first
+
+		halt 404 unless @group
+
+		@claim = @group.claims_dataset
+			.where(id: params[:id])
+			.first
+
+		halt 404 unless @claim
+		halt 403 unless can_edit_claim?(@user, @group, @claim)
+
+		assignment = @claim.completed_assignment
+
+		halt 404 unless assignment
+		
+		verification = assignment.verification
+		
+		verification.update(
+			accepted_at: Time.now,
+			accepted_by: @user.id
+		)
+		
+		redirect "/groups/#{@group.slug}/claims/#{@claim.id}"
+	end
+	
 	
 	
 	
