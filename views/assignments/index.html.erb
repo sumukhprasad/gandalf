@@ -13,12 +13,13 @@
 <body>
 	<%= erb :"_includes/navigation" %>
 	
-	
 	<main>
-		<h1>Welcome to Gandalf!</h1>
+		<h2>My assignments</h2>
+
 		
-		<% if !@assignments.empty?  %>
-			<h2>My Pending Assignments</h2>
+		<% if @assignments.empty?  %>
+			No assignments
+		<% else  %>
 			<table>
 				<thead>
 					<tr>
@@ -27,6 +28,8 @@
 						<th>Statement</th>
 						<th>Assigned by</th>
 						<th>Why?</th>
+						<th>Claim Status</th>
+						<th>Assignment Status</th>
 						<th>Verify</th>
 					</tr>
 				</thead>
@@ -57,62 +60,38 @@
 								<%= assignment.reason %>
 							</td>
 							<td>
+								<%= claim.status %>
+							</td>
+							<td>
+								<%= assignment.status %>
+							</td>
+		
+							<% if claim.status != "completed"  %>
+							<td>
 								<a href="/verify_assignment/<%= assignment.id %>">
 									Verify >
 								</a>
 							</td>
+							<% elsif assignment.status == "completed" %>
+							<td>
+								<span style="color: green">Verified already.</span>
+							</td>
+							<% elsif assignment.status == "rescinded" %>
+							<td>
+								<span style="color: red">RESCINDED!</span>
+							</td>
+							<% elsif assignment.status == "rescinded" %>
+							<td>
+								<span style="opacity: 0.4">...</span>
+							</td>
+							<% end %>
 						</tr>
 					<% end %>
 				</tbody>
 			</table>
 		<% end %>
-		
-		
-		
-		<h2>My active claims</h2>
-		<% if @claims.empty? %>
-			<p>No claims made yet.</p>
-		<% else %>
-			<table>
-				<thead>
-					<tr>
-						<th>Created at</th>
-						<th>Group</th>
-						<th>Statement</th>
-						<th>Status</th>
-						<th>Last Updated</th>
-					</tr>
-				</thead>
-				<tbody>
-					<% @claims.each do |claim| %>
-						<tr>
-							<td>
-								<%= claim.created_at.strftime("%b %d, %Y, %-I:%M %p") %>
-							</td>
-							<td>
-								<a href="/groups/<%= claim.group.slug %>">
-									<%= claim.group.name %>
-								</a>
-							
-							</td>
-							<td>
-								<a href="/groups/<%= claim.group.slug %>/claims/<%= claim.id %>">
-									<span style="font-size:1.5em"><%= claim.statement %></span>
-								</a>
-							</td>
-							<td>
-								<%= claim.status %>
-							</td>
-							<td>
-								<%= claim.updated_at.strftime("%b %d, %Y, %-I:%M %p") %>
-							</td>
-						</tr>
-					<% end %>
-				</tbody>
-			</table>
-		<% end %>
-		
 	</main>
+	
 
 	<%= erb :"_includes/footer" %>
 </body>

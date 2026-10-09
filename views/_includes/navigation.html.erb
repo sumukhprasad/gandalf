@@ -3,7 +3,7 @@
 		<div class="top">
 			<img src="/images/logo.png">
 			
-			<div>
+			<div style="margin-bottom: 20px">
 				<% if @current_user %>
 					Hello, <%= @current_user.username %>. <a href="/users/logout">Log out...</a>
 				<% else %>
@@ -13,26 +13,36 @@
 			</div>
 		</div>
 		
-		<div class="bottom">
+		<div class="bottom" style="margin-top: 20px">
 			<div class="tabs">
-				<a href="/"><div class="tab">
+				<a href="/"><div class="tab <%= "active" if request.path_info == "/" %>">
 					home
 				</div></a>
 				
 
-				<a href="/groups"><div class="tab">
+				<a href="/groups"><div class="tab <%= "active" if request.path_info.start_with?("/groups") %>">
 					my groups
 				</div></a>
 				
 
+				<a href="/claims"><div class="tab <%= "active" if request.path_info == "/claims" %>">
+					my claims
+				</div></a>
+				
+
+				<a href="/assignments"><div class="tab <%= "active" if request.path_info == "/assignments" %>">
+					my assignments
+				</div></a>
+				
+
 				<% if @current_user.role == "admin" %>
-				<a href="/admin"><div class="tab">
+				<a href="/admin"><div class="tab <%= "active" if request.path_info.start_with?("/admin") %>">
 					administrative
 				</div></a>
 				<% end %>
 				
 
-				<a href="/users/profile"><div class="tab">
+				<a href="/users/profile"><div class="tab <%= "active" if request.path_info == "/users/profile" %>">
 					user settings
 				</div></a>
 			</div>
